@@ -4,7 +4,7 @@
   "main": "src",
   "repository": "git@github.com:cmudig/falcon.git",
   "author": "cmudig",
-  "license": "MIT",
+  "license": "BSD-3-Clause",
   "description": "Scalable interactions across linked views.",
   "scripts": {
     "build": "tsc",

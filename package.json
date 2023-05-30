@@ -5,7 +5,7 @@
   "description": "falcon-vis package and examples of its use",
   "repository": "git+https://github.com/cmudig/falcon.git",
   "author": "xnought <bertuccd@oregonstate.edu>",
-  "license": "ISC",
+  "license": "BSD-3-Clause",
   "bugs": {
     "url": "https://github.com/cmudig/falcon/issues"
   },
