@@ -230,7 +230,7 @@
 			>FalconVis</a
 		>
 		removes the latency from where it matters (the cross-filtering user
-		interaction) and put it where latency doesn't matter (before
+		interaction) and puts it where latency doesn't matter (before
 		interaction).
 	</p>
 	<p>
@@ -295,8 +295,9 @@
 		<a href="https://github.com/cmudig/falcon-vis" target="_blank"
 			>FalconVis</a
 		>
-		instead with more than 25x the data (from ~260,000 to ~7,000,000). We
-		use the
+		instead with more than 25x the data (from ~260,000 to ~7,000,000). Or
+		try the <a href="?size=196m">196m HeavyAI example</a> for 700x the data
+		from (from ~260,000 to ~196,000,000). We use the
 		<a target="_blank" href="https://github.com/cmudig/falcon-vis#HeavyaiDB"
 			>HeavyAI</a
 		>
@@ -390,17 +391,9 @@
 <script type="module">
 	import { FalconVis, DuckDB, HeavyaiDB } from "falcon-vis";
 
-	main();
-
-	async function main() {
-		var formatNumber = d3.format(",d"),
-			formatChange = d3.format("+,d"),
-			formatDate = d3.time.format("%B %d, %Y"),
-			formatTime = d3.time.format("%I:%M %p");
-		var formatMonthDay = d3.time.format("%m/%d");
-
-		const db = await HeavyaiDB.connectSession(
-			{
+	const sessions = {
+		"7m": {
+			connection: {
 				protocol: "https",
 				host: "metis.mapd.com",
 				port: 443,
@@ -408,17 +401,78 @@
 				user: "admin",
 				password: "HyperInteractive",
 			},
-			"flights_donotmodify",
+			table: "flights_donotmodify",
+			size: 7_000_000,
+			columnNames: {
+				date: "dep_timestamp",
+				delay: "arrdelay",
+				distance: "distance",
+				hour: "deptime",
+				origin: "origin",
+				dest: "dest",
+			},
+			startingFilter: [
+				null,
+				null,
+				null,
+				[new Date(2008, 4, 0), new Date(2008, 7, 0)],
+			],
+		},
+		"196m": {
+			connection: {
+				protocol: "https",
+				host: "demo-flights.heavy.ai",
+				port: 443,
+				dbName: "newflights",
+				user: "demouser",
+				password: "HyperInteractive",
+			},
+			table: "flights",
+			size: 196_000_000,
+			columnNames: {
+				date: "actual_dep_time_stamp",
+				delay: "arrdelay",
+				distance: "distance",
+				hour: "deptime",
+				origin: "origin",
+				dest: "dest",
+			},
+			startingFilter: [
+				null,
+				null,
+				null,
+				[new Date(2010, 0, 0), new Date(2020, 0, 0)],
+			],
+		},
+	};
+
+	// default 7_000_000 example
+	let selectedSession = sessions["7m"];
+
+	// can specify ?size=7m or ?size=196m
+	getURLParameters({
+		size: (v) => {
+			if (v !== undefined && v in sessions) {
+				selectedSession = sessions[v];
+			}
+		},
+	});
+
+	main(selectedSession);
+
+	async function main(selectedSession) {
+		var formatNumber = d3.format(",d"),
+			formatChange = d3.format("+,d"),
+			formatDate = d3.time.format("%B %d, %Y"),
+			formatTime = d3.time.format("%I:%M %p");
+		var formatMonthDay = d3.time.format("%m/%d");
+
+		const { connection, table, columnNames } = selectedSession;
+		const db = await HeavyaiDB.connectSession(
+			connection,
+			table,
 			new Map([["deptime", "(deptime/100)"]])
 		);
-		const columnNames = {
-			date: "dep_timestamp",
-			delay: "arrdelay",
-			distance: "distance",
-			hour: "deptime",
-			origin: "origin",
-			dest: "dest",
-		};
 
 		const falcon = new FalconVis(db);
 
@@ -547,14 +601,6 @@
 		var chart = d3.selectAll(".chart").data(charts);
 		var list = d3.selectAll(".list").data([flightEntries]);
 
-		// start out with filtered by date
-		renderAll();
-		await dateChart.filter([new Date(2008, 4, 0), new Date(2008, 7, 0)]);
-		if (computeEntries) {
-			entries = Array.from(await falcon.entries({ length: 40 }));
-		}
-		renderAll();
-
 		// Renders the specified chart or list.
 		function render(method) {
 			d3.select(this).call(method);
@@ -577,6 +623,15 @@
 			await charts[i].filter(null);
 			renderAll();
 		};
+
+		// start out with filtered by date
+		renderAll();
+		await window.filter(selectedSession.startingFilter);
+		// await dateChart.filter([new Date(2008, 4, 0), new Date(2008, 7, 0)]);
+		if (computeEntries) {
+			entries = Array.from(await falcon.entries({ length: 40 }));
+		}
+		renderAll();
 
 		function barChart() {
 			if (!barChart.id) barChart.id = 0;
@@ -606,7 +661,7 @@
 						g = div.select("g");
 					// Create the skeletal chart.
 					if (g.empty()) {
-						div.on("mouseenter", async function (d, i) {
+						div.on("mousedown", async function (d, i) {
 							await view.activate();
 						});
 						div.select(".title")
@@ -977,5 +1032,22 @@
 				sec
 			);
 		}
+	}
+
+	/**
+	 * Takes in an object with keys that are the URL param name and the value is a callback that contains the url value
+	 * @param {paramName: (value) => void} requestedParamsObj
+	 */
+	function getURLParameters(requestedParamsObj) {
+		const requestedEntries = Object.entries(requestedParamsObj);
+		const urlParameters = new URLSearchParams(window.location.search);
+		requestedEntries.forEach(([parameter, callback], i) => {
+			if (urlParameters.has(parameter)) {
+				const value = urlParameters.get(parameter);
+				callback(value);
+			} else {
+				callback(undefined);
+			}
+		});
 	}
 </script>

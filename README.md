@@ -20,14 +20,15 @@ You can cross-filter billions of data entries in the browser with no interaction
 
 **`Github Pages`**
 
-| Data                                                                                     | Type        | Count | Live Demo                                                                            |
-| ---------------------------------------------------------------------------------------- | ----------- | ----- | ------------------------------------------------------------------------------------ |
-| Movies                                                                                   | Arrow       | 3k    | [Click to open on Github Pages](https://dig.cmu.edu/falcon-vis/movies-arrow/)        |
-| Movies                                                                                   | JSON        | 3k    | [Click to open on Github Pages](https://dig.cmu.edu/falcon-vis/movies-json/)         |
-| Movies                                                                                   | DuckDB WASM | 3k    | [Click to open on Github Pages](https://dig.cmu.edu/falcon-vis/movies-duckdb/)       |
-| Flights (with US Map)                                                                    | DuckDB WASM | 3m    | [Click to open on Github Pages](https://dig.cmu.edu/falcon-vis/flights-duckdb/)      |
-| Flights (comparison with [crossfilter](https://github.com/crossfilter/crossfilter) fork) | DuckDB WASM | 3m    | [Click to open on Github Pages](https://dig.cmu.edu/falcon-vis/crossfilter-duckdb/)  |
-| Flights (comparison with [crossfilter](https://github.com/crossfilter/crossfilter) fork) | HeavyAI     | 7m    | [Click to open on Github Pages](https://dig.cmu.edu/falcon-vis/crossfilter-heavyai/) |
+| Data                                                                                     | Type        | Count | Live Demo                                                                                      |
+| ---------------------------------------------------------------------------------------- | ----------- | ----- | ---------------------------------------------------------------------------------------------- |
+| Movies                                                                                   | Arrow       | 3k    | [Click to open on Github Pages](https://dig.cmu.edu/falcon-vis/movies-arrow/)                  |
+| Movies                                                                                   | JSON        | 3k    | [Click to open on Github Pages](https://dig.cmu.edu/falcon-vis/movies-json/)                   |
+| Movies                                                                                   | DuckDB WASM | 3k    | [Click to open on Github Pages](https://dig.cmu.edu/falcon-vis/movies-duckdb/)                 |
+| Flights (with US Map)                                                                    | DuckDB WASM | 3m    | [Click to open on Github Pages](https://dig.cmu.edu/falcon-vis/flights-duckdb/)                |
+| Flights (comparison with [crossfilter](https://github.com/crossfilter/crossfilter) fork) | DuckDB WASM | 3m    | [Click to open on Github Pages](https://dig.cmu.edu/falcon-vis/crossfilter-duckdb/)            |
+| Flights (comparison with [crossfilter](https://github.com/crossfilter/crossfilter) fork) | HeavyAI     | 7m    | [Click to open on Github Pages](https://dig.cmu.edu/falcon-vis/crossfilter-heavyai/)           |
+| Flights (comparison with [crossfilter](https://github.com/crossfilter/crossfilter) fork) | HeavyAI     | 196m  | [Click to open on Github Pages](https://dig.cmu.edu/falcon-vis/crossfilter-heavyai/?size=196m) |
 
 **`ObservableHQ`**
 
