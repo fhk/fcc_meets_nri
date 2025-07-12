@@ -1,5 +1,5 @@
 <script lang="ts">
-	import VegaLite from "svelte-vega/src/VegaLite.svelte";
+	import { VegaLite } from "svelte-vega";
 	import type { VegaLiteSpec } from "svelte-vega";
 	import TitleBar from "./TitleBar.svelte";
 	import { primary } from "./colors";
@@ -9,7 +9,7 @@
 	export let width = 500;
 	export let height = 50;
 	export let barColor = primary;
-	export let title = "Table Rows Selected";
+	export let title = "Number of cities";
 
 	$: spec = {
 		$schema: "https://vega.github.io/schema/vega-lite/v5.json",
