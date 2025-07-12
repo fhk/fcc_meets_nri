@@ -43,8 +43,7 @@
   let isFilterApplied: boolean = false;
 
   // --- Data and Columns for the FalconVis `entries` table ---
-  let page = 0;
-  let numEntries = 25;
+  // Removed 'page' and 'numEntries' as pagination is no longer handled here
   let entries: Record<string, any>[] = []; // Initialize as an empty array, will be populated by FalconVis
 
   // Reactive variable that will hold the filtered entries
@@ -144,6 +143,7 @@
         );
       });
     }
+    // Keep all filtered entries here; SvelteTable will handle display limit
     filteredEntries = tempFilteredEntries;
   }
 
@@ -254,29 +254,21 @@
     await falcon.link();
 
     // Initial load of entries for the SvelteTable
-    await fetchEntries();
+    // Fetch all entries from FalconVis initially, without pagination parameters
+    entries = Array.from(await falcon.entries());
   });
 
-  let resolved = true;
+  // Removed 'resolved' variable as it's no longer needed
 
   // Function to fetch and update entries
+  // This function now just fetches all currently filtered entries from FalconVis
   async function fetchEntries() {
-    if (falcon && resolved) {
-      resolved = false;
-      try {
-        // Falcon.entries() will now return data already filtered by falconFilterConfig
-        entries = Array.from(
-          await falcon.entries({
-            length: numEntries,
-            offset: page,
-          })
-        );
-      } catch (error) {
-        console.error("Error fetching entries:", error);
-        entries = []; // Reset entries on error
-      } finally {
-        resolved = true;
-      }
+    if (!falcon) return; // Ensure falcon is initialized
+    try {
+      entries = Array.from(await falcon.entries());
+    } catch (error) {
+      console.error("Error fetching entries:", error);
+      entries = []; // Reset entries on error
     }
   }
 
@@ -292,7 +284,8 @@
   }
 
   // Reactive statement to re-fetch entries when relevant states change
-  $: if (originState || arrDelayState || depDelayState || flightDateState) {
+  // Added check for `falcon` to prevent errors during initial component mount
+  $: if (falcon && (originState || arrDelayState || depDelayState || flightDateState)) {
     fetchEntries();
   }
 </script>
@@ -490,20 +483,7 @@
      <div>
      </div>
      {#if entries}
-       <div class="pagination-buttons">
-         <button
-           on:click={async () => {
-             page = Math.max(page - numEntries, 0);
-             await fetchEntries(); // Call the helper function
-           }}>back</button
-         >
-         <button
-           on:click={async () => {
-             page += numEntries;
-             await fetchEntries(); // Call the helper function
-           }}>next</button
-         >
-       </div>
+       <!-- Pagination buttons removed as per request -->
        <SvelteTable columns="{entriesColumns}" rows="{filteredEntries}" />
      {/if}
    </div>
