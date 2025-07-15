@@ -1,0 +1,33 @@
+{
+  "name": "flights-duckdb",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "svelte-check --tsconfig ./tsconfig.json"
+  },
+  "dependencies": {
+    "d3": "^7.8.5",
+    "falcon-vis": "0.17.4",
+    "svelte-vega": "^2.1.0",
+    "vega": "^5.24.0",
+    "vega-lite": "^5.16.3",
+    "fast-deep-equal": "^3.1.3",
+    "@duckdb/duckdb-wasm": "1.28.1-dev258.0"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^2.4.4",
+    "@tsconfig/svelte": "^4.0.1",
+    "svelte": "^4.1.2",
+    "svelte-check": "^3.5.1",
+    "tslib": "^2.5.0",
+    "typescript": "^5.1.6",
+    "vite": "^4.4.9"
+  },
+  "resolutions": {
+    "rollup": "3.28.1"
+  }
+}
