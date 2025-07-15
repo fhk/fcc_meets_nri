@@ -7,10 +7,6 @@ export default defineConfig({
 	build: {
 		rollupOptions: {
 			external: [
-				"fast-deep-equal",
-				// Add other modules here if you encounter similar "failed to resolve"
-				// errors for them during the build process, *after* confirming
-				// they are installed and should be external.
 			],
 		},
 	},
